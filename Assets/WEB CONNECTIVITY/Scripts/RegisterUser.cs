@@ -65,7 +65,7 @@ public class RegisterUser : MonoBehaviour
             userFeedbackMessageText.color = Color.red;
             userFeedbackMessageText.text = "Passwords do not match!";
         }
-        else if (emailTextInputfield.text.Contains("@") == false)
+        else if (emailTextInputfield.text.Contains("@") == false) // This is only partial check, in partice someone could add an '@' but leave out '.com' or '.info' making the emial invalid still.
         {
             userFeedbackMessageText.color = Color.red;
             userFeedbackMessageText.text = "Email must contain '@'!";

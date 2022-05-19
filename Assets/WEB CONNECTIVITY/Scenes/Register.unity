@@ -2199,6 +2199,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60b7100568ed85c4691f6278d8d3ecf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minUsernameCharacterAmount: 6
+  minPasswordCharacterAmount: 8
   panelTransform: {fileID: 543261769}
   usernameTextInputfield: {fileID: 1496378017}
   firstNameTextInputfield: {fileID: 350105932}
@@ -2209,7 +2211,7 @@ MonoBehaviour:
   birthdateDayTextInputfield: {fileID: 38498736}
   birthdateMonthTextInputfield: {fileID: 222967665}
   birthdateYearTextInputfield: {fileID: 1164471417}
-  userFeedbackMessageText: {fileID: 0}
+  userFeedbackMessageText: {fileID: 1916861015}
 --- !u!1 &617191838
 GameObject:
   m_ObjectHideFlags: 0
