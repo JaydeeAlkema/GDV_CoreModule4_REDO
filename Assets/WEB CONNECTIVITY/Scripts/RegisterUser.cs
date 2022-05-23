@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 public class RegisterUser : MonoBehaviour
@@ -31,6 +33,7 @@ public class RegisterUser : MonoBehaviour
     [SerializeField] private TMP_Text userFeedbackMessageText = default;
 
     private bool validInput = false; // this HAS to be true for the register form the be send successfully.
+    private int customErrorCode = 0; // 0 is good, everything else is bad.
     #endregion
 
     /// <summary>
@@ -72,8 +75,6 @@ public class RegisterUser : MonoBehaviour
         }
         else
         {
-            userFeedbackMessageText.color = Color.green;
-            userFeedbackMessageText.text = "Successfully created account! Redirecting to Login page...";
             validInput = true;
         }
     }
@@ -95,14 +96,82 @@ public class RegisterUser : MonoBehaviour
     /// <returns></returns>
     private IEnumerator SendRegisterWebRequestCoroutine()
     {
-        yield return new WaitForEndOfFrame();
+        string insertUserURL = "https://studentdav.hku.nl/~jaydee.alkema/databasing/insert_user.php?";
+        long birthdateToTimeStamp = GetTimestampFromDateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text));
+        string insertUserData = $"username={usernameTextInputfield.text}&first_name={firstNameTextInputfield.text}&last_name={lastNameTextInputfield.text}&password={passwordTextInputfield.text}&email={emailTextInputfield.text}&birth_date={birthdateToTimeStamp}";
 
-        StartCoroutine(LoadLoginPage());
+        UnityWebRequest www = new UnityWebRequest(insertUserURL + insertUserData);
+        DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer();
+        www.downloadHandler = downloadHandler;
+
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            string errorMessage = www.downloadHandler.text;
+            if (errorMessage.ToLower().Contains("error"))
+            {
+                string[] splitErrorMessage = errorMessage.Split(':');
+                customErrorCode = int.Parse(splitErrorMessage[1]);
+                HandleCustomErrorCode();
+            }
+            else
+            {
+                customErrorCode = 0;
+            }
+        }
+
+        if (customErrorCode == 0)
+        {
+            userFeedbackMessageText.color = Color.green;
+            userFeedbackMessageText.text = "Account created successfully! Forwarding to login page...";
+            StartCoroutine(LoadLoginPage());
+        }
+        else
+        {
+            yield return null;
+        }
     }
 
     private IEnumerator LoadLoginPage()
     {
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("Login");
+    }
+
+    /// <summary>
+    /// Convert Day, Month & Year Datetime to Timestamp
+    /// </summary>
+    /// <returns> Datetime to Timestamp (as long) </returns>
+    private long GetTimestampFromDateTime(int day, int month, int year)
+    {
+        DateTime dateTime = new DateTime(year, month, day);
+        return ((DateTimeOffset)dateTime).ToUnixTimeSeconds();
+    }
+
+    /// <summary>
+    /// Gives the user an error message based on the custom error code. (Which is returned from the webrequest)
+    /// </summary>
+    private void HandleCustomErrorCode()
+    {
+        switch (customErrorCode)
+        {
+            case 1:
+                userFeedbackMessageText.color = Color.red;
+                userFeedbackMessageText.text = "Email already in use!";
+                break;
+
+            case 2:
+                userFeedbackMessageText.color = Color.red;
+                userFeedbackMessageText.text = "Username already in use!";
+                break;
+
+            default:
+                break;
+        }
     }
 }
