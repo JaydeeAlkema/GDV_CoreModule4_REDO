@@ -96,47 +96,57 @@ public class RegisterUser : MonoBehaviour
     /// <returns></returns>
     private IEnumerator SendRegisterWebRequestCoroutine()
     {
-        string insertUserURL = "https://studentdav.hku.nl/~jaydee.alkema/databasing/insert_user.php?";
+        string insertUserURL = "https://studentdav.hku.nl/~jaydee.alkema/databasing/insert_user.php";
         long birthdateToTimeStamp = GetTimestampFromDateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text));
-        string insertUserData = $"username={usernameTextInputfield.text}&first_name={firstNameTextInputfield.text}&last_name={lastNameTextInputfield.text}&password={passwordTextInputfield.text}&email={emailTextInputfield.text}&birth_date={birthdateToTimeStamp}";
 
-        UnityWebRequest www = new UnityWebRequest(insertUserURL + insertUserData);
-        DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer();
-        www.downloadHandler = downloadHandler;
+        WWWForm form = new WWWForm();
+        form.AddField("username", usernameTextInputfield.text);
+        form.AddField("first_name", firstNameTextInputfield.text);
+        form.AddField("last_name", lastNameTextInputfield.text);
+        form.AddField("password", passwordTextInputfield.text);
+        form.AddField("email", emailTextInputfield.text);
+        form.AddField("birth_date", birthdateToTimeStamp.ToString());
 
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest www = UnityWebRequest.Post(insertUserURL, form))
         {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            string errorMessage = www.downloadHandler.text;
-            if (errorMessage.ToLower().Contains("error"))
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
             {
-                string[] splitErrorMessage = errorMessage.Split(':');
-                customErrorCode = int.Parse(splitErrorMessage[1]);
-                HandleCustomErrorCode();
+                Debug.Log(www.error);
             }
             else
             {
-                customErrorCode = 0;
+                string errorMessage = www.downloadHandler.text;
+                if (errorMessage.ToLower().Contains("error"))
+                {
+                    string[] splitErrorMessage = errorMessage.Split(':');
+                    customErrorCode = int.Parse(splitErrorMessage[1]);
+                    HandleCustomErrorCode();
+                }
+                else
+                {
+                    customErrorCode = 0;
+                }
             }
-        }
 
-        if (customErrorCode == 0)
-        {
-            userFeedbackMessageText.color = Color.green;
-            userFeedbackMessageText.text = "Account created successfully! Forwarding to login page...";
-            StartCoroutine(LoadLoginPage());
-        }
-        else
-        {
-            yield return null;
+            if (customErrorCode == 0)
+            {
+                userFeedbackMessageText.color = Color.green;
+                userFeedbackMessageText.text = "Account created successfully! Forwarding to login page...";
+                StartCoroutine(LoadLoginPage());
+            }
+            else
+            {
+                yield return null;
+            }
         }
     }
 
+    /// <summary>
+    /// Loads the login page.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator LoadLoginPage()
     {
         yield return new WaitForSeconds(3f);
