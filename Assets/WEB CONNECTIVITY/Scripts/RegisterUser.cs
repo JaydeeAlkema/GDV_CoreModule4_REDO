@@ -11,6 +11,7 @@ public class RegisterUser : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int minUsernameCharacterAmount = 6;
     [SerializeField] private int minPasswordCharacterAmount = 8;
+    [SerializeField] private bool loadUserDataOnSceneLoad = false;
 
     [Header("Misc References")]
     [SerializeField] private Transform panelTransform = default;
@@ -35,6 +36,30 @@ public class RegisterUser : MonoBehaviour
     private bool validInput = false; // this HAS to be true for the register form the be send successfully.
     private int customErrorCode = 0; // 0 is good, everything else is bad.
     #endregion
+
+    private void Start()
+    {
+        if (loadUserDataOnSceneLoad)
+        {
+            UserData userData = new UserData();
+            userData.GetDataFromPlayerPrefs();
+
+            if (userData != null && userData.id != "0")
+            {
+                usernameTextInputfield.text = userData.username;
+                firstNameTextInputfield.text = userData.first_name;
+                lastNameTextInputfield.text = userData.last_name;
+                emailTextInputfield.text = userData.email;
+                passwordTextInputfield.text = userData.password;
+                passwordConfirmTextInputfield.text = userData.password;
+
+                DateTime dateTime = DateTime.Parse(userData.birth_date);
+                birthdateDayTextInputfield.text = dateTime.Day.ToString();
+                birthdateMonthTextInputfield.text = dateTime.Month.ToString();
+                birthdateYearTextInputfield.text = dateTime.Year.ToString();
+            }
+        }
+    }
 
     /// <summary>
     /// Validates the input by checking many use cases. This is purely for the input form, this exact process is repeated in the PHP code.
@@ -91,6 +116,26 @@ public class RegisterUser : MonoBehaviour
     }
 
     /// <summary>
+    /// Calls the SendSaveChangesWebRequestCoroutine function.
+    /// </summary>
+    public void SendSaveChangesWebRequest()
+    {
+        ValidateInputs();
+        if (!validInput) return;
+
+        StartCoroutine(SendSaveChangesWebRequestCoroutine());
+    }
+
+    /// <summary>
+    /// Loads scene by given index.
+    /// </summary>
+    /// <param name="index"> Index of the scene. </param>
+    public void LoadSceneByIndex(int index)
+    {
+        SceneManager.LoadScene(index);
+    }
+
+    /// <summary>
     /// Send the actual data via a webrequest to insert a new user into the database.
     /// </summary>
     /// <returns></returns>
@@ -134,7 +179,7 @@ public class RegisterUser : MonoBehaviour
             {
                 userFeedbackMessageText.color = Color.green;
                 userFeedbackMessageText.text = "Account created successfully! Forwarding to login page...";
-                StartCoroutine(LoadLoginPage());
+                LoadSceneByIndex(0);
             }
             else
             {
@@ -144,13 +189,65 @@ public class RegisterUser : MonoBehaviour
     }
 
     /// <summary>
-    /// Loads the login page.
+    /// Send the actual data via a webrequest to insert a new user into the database.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator LoadLoginPage()
+    private IEnumerator SendSaveChangesWebRequestCoroutine()
     {
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Login");
+        string insertUserURL = "https://studentdav.hku.nl/~jaydee.alkema/databasing/insert_user.php";
+        long birthdateToTimeStamp = GetTimestampFromDateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text));
+
+        UserData userData = new UserData();
+        userData.GetDataFromPlayerPrefs();
+
+        if (userData.id == "0")
+        {
+            yield return null;
+        }
+
+        WWWForm form = new WWWForm();
+        form.AddField("id", userData.id);
+        form.AddField("username", usernameTextInputfield.text);
+        form.AddField("first_name", firstNameTextInputfield.text);
+        form.AddField("last_name", lastNameTextInputfield.text);
+        form.AddField("password", passwordTextInputfield.text);
+        form.AddField("email", emailTextInputfield.text);
+        form.AddField("birth_date", birthdateToTimeStamp.ToString());
+
+        using (UnityWebRequest www = UnityWebRequest.Post(insertUserURL, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                string errorMessage = www.downloadHandler.text;
+                if (errorMessage.ToLower().Contains("error"))
+                {
+                    Debug.Log(errorMessage);
+                    string[] splitErrorMessage = errorMessage.Split(':');
+                    customErrorCode = int.Parse(splitErrorMessage[1]);
+                    HandleCustomErrorCode();
+                }
+                else
+                {
+                    customErrorCode = 0;
+                }
+            }
+
+            if (customErrorCode == 0)
+            {
+                userFeedbackMessageText.color = Color.green;
+                userFeedbackMessageText.text = "Saved changes successfully!";
+            }
+            else
+            {
+                yield return null;
+            }
+        }
     }
 
     /// <summary>

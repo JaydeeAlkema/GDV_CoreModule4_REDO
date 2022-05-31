@@ -24,9 +24,12 @@ EditorBuildSettings:
     path: Assets/NETWORKING/TransportBase/transport-server.unity
     guid: c55de0db348e998418f9284239b415a7
   - enabled: 1
+    path: Assets/WEB CONNECTIVITY/Scenes/Login.unity
+    guid: c1c2ef583459df144b73a49a358c84a1
+  - enabled: 1
     path: Assets/WEB CONNECTIVITY/Scenes/Register.unity
     guid: 35887383ced7ac14e9fb4dd4fcbc34a5
   - enabled: 1
-    path: Assets/WEB CONNECTIVITY/Scenes/Login.unity
-    guid: c1c2ef583459df144b73a49a358c84a1
+    path: Assets/WEB CONNECTIVITY/Scenes/User Data.unity
+    guid: e6fc09dee7ee3d545b49239ba2654f4c
   m_configObjects: {}
