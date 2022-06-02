@@ -6,30 +6,30 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/NETWORKING/Scenes/startup.unity
+    path: Assets/3_NETWORKING Source Code/Scenes/startup.unity
     guid: 295b4c21d6f97d14f98d86e336ff7043
   - enabled: 1
-    path: Assets/NETWORKING/Scenes/client.unity
+    path: Assets/3_NETWORKING Source Code/Scenes/client.unity
     guid: ca79d0842e199a44fbbbfde22a285b85
   - enabled: 1
-    path: Assets/NETWORKING/Scenes/server.unity
+    path: Assets/3_NETWORKING Source Code/Scenes/server.unity
     guid: cf89e74147c67154f920c69c7a4a1200
   - enabled: 0
-    path: Assets/NETWORKING/TransportBase/start.unity
+    path: Assets/3_NETWORKING Source Code/TransportBase/start.unity
     guid: b51ff4728db96684aa9f5746f489d24b
   - enabled: 0
-    path: Assets/NETWORKING/TransportBase/transport-client.unity
+    path: Assets/3_NETWORKING Source Code/TransportBase/transport-client.unity
     guid: b361e8c710f1d464ca8d1444c981a0d5
   - enabled: 0
-    path: Assets/NETWORKING/TransportBase/transport-server.unity
+    path: Assets/3_NETWORKING Source Code/TransportBase/transport-server.unity
     guid: c55de0db348e998418f9284239b415a7
   - enabled: 1
-    path: Assets/WEB CONNECTIVITY/Scenes/Login.unity
+    path: Assets/1_WEB CONNECTIVITY/Scenes/Login.unity
     guid: c1c2ef583459df144b73a49a358c84a1
   - enabled: 1
-    path: Assets/WEB CONNECTIVITY/Scenes/Register.unity
+    path: Assets/1_WEB CONNECTIVITY/Scenes/Register.unity
     guid: 35887383ced7ac14e9fb4dd4fcbc34a5
   - enabled: 1
-    path: Assets/WEB CONNECTIVITY/Scenes/User Data.unity
+    path: Assets/1_WEB CONNECTIVITY/Scenes/User Data.unity
     guid: e6fc09dee7ee3d545b49239ba2654f4c
   m_configObjects: {}
