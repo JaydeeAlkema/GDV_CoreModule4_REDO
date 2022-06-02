@@ -123,6 +123,78 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &103184482
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 103184484}
+  - component: {fileID: 103184483}
+  - component: {fileID: 103184486}
+  - component: {fileID: 103184485}
+  m_Layer: 0
+  m_Name: Tester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &103184483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103184482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b6ff91d810a00448ff85a6d6ce7adc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  server: {fileID: 103184486}
+  client: {fileID: 103184485}
+  adressInput: {fileID: 1253655224}
+--- !u!4 &103184484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103184482}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &103184485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103184482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4852ffc62d20c5a4280033142f26ed1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &103184486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103184482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945b979aaa6bc5f42935bba3b21f5f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &131700855
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,7 +925,7 @@ GameObject:
   - component: {fileID: 1253655222}
   - component: {fileID: 1253655224}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: Adress Inputfield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1132,9 +1204,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 311168672}
-        m_TargetAssemblyTypeName: ClientServerSelection, Assembly-CSharp
-        m_MethodName: GoClient
+      - m_Target: {fileID: 103184483}
+        m_TargetAssemblyTypeName: Tester, Assembly-CSharp
+        m_MethodName: OnOnlineConnectButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1621,9 +1693,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 311168672}
-        m_TargetAssemblyTypeName: ClientServerSelection, Assembly-CSharp
-        m_MethodName: GoServer
+      - m_Target: {fileID: 103184483}
+        m_TargetAssemblyTypeName: Tester, Assembly-CSharp
+        m_MethodName: OnOnlineHostButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

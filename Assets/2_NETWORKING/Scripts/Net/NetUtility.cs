@@ -13,7 +13,6 @@ public enum OpCode
 
 public static class NetUtility
 {
-
     public static void OnData(DataStreamReader streamReader, NetworkConnection connection, Server server = null)
     {
         NetMessage msg = null;
@@ -23,7 +22,7 @@ public static class NetUtility
         {
             //case OpCode.WELCOME: msg = new NetWelcome(streamReader); break;
             //case OpCode.START_GAME: msg = new NetStartGame(streamReader); break;
-            //case OpCode.KEEP_ALIVE: msg = new NetKeepAlive(streamReader); break;
+            case OpCode.KEEP_ALIVE: msg = new NetKeepAlive(streamReader); break;
             //case OpCode.PLACE_TOWER: msg = new NetPlaceTower(streamReader); break;
             //case OpCode.REMATCH: msg = new NetRematch(streamReader); break;
             default:

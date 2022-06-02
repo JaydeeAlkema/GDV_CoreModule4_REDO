@@ -37,12 +37,10 @@ public class Server : MonoBehaviour
         AcceptNewConnections();
         UpdateMessagePump();
     }
-
     public void OnDestroy()
     {
         Shutdown();
     }
-
     public void OnApplicationQuit()
     {
         Shutdown();
@@ -70,7 +68,6 @@ public class Server : MonoBehaviour
         connections = new NativeList<NetworkConnection>(2, Allocator.Persistent);
         isActive = true;
     }
-
     public void Shutdown()
     {
         if (isActive)
@@ -88,7 +85,6 @@ public class Server : MonoBehaviour
     {
 
     }
-
     /// <summary>
     /// Check if there are any people not connected, but still in the list of connections.
     /// </summary>
@@ -103,7 +99,6 @@ public class Server : MonoBehaviour
             }
         }
     }
-
     /// <summary>
     /// Is there anybody waiting to connect, if so, connect them if possible.
     /// </summary>
@@ -115,7 +110,6 @@ public class Server : MonoBehaviour
             connections.Add(c);
         }
     }
-
     /// <summary>
     /// Check for messages and handle them accordingly.
     /// </summary>
@@ -129,7 +123,7 @@ public class Server : MonoBehaviour
             {
                 if (cmd == NetworkEvent.Type.Data)
                 {
-                    //NetUtility.OnData(streamReader, connections[i], this);
+                    NetUtility.OnData(streamReader, connections[i], this);
                 }
                 else if (cmd == NetworkEvent.Type.Disconnect)
                 {
@@ -153,10 +147,9 @@ public class Server : MonoBehaviour
     {
         DataStreamWriter writer;
         driver.BeginSend(connection, out writer);
-        //msg.Serialize(ref writer);
+        msg.Serialize(ref writer);
         driver.EndSend(writer);
     }
-
     /// <summary>
     /// Broadcast message to all connections (users).
     /// </summary>
@@ -165,7 +158,7 @@ public class Server : MonoBehaviour
     {
         for (int i = 0; i < connections.Length; i++)
         {
-            //Debug.Log($"Sending {msg.Code} to : {connections[i].InternalId}");
+            Debug.Log($"Sending {msg.code} to : {connections[i].InternalId}");
             SendToClient(connections[i], msg);
         }
     }

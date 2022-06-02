@@ -6,23 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/3_NETWORKING Source Code/Scenes/startup.unity
-    guid: 295b4c21d6f97d14f98d86e336ff7043
+    path: Assets/2_NETWORKING/Scenes/Main Menu.unity
+    guid: d1d52846dddec0a4fb505b2dd3dd3c86
   - enabled: 1
-    path: Assets/3_NETWORKING Source Code/Scenes/client.unity
-    guid: ca79d0842e199a44fbbbfde22a285b85
-  - enabled: 1
-    path: Assets/3_NETWORKING Source Code/Scenes/server.unity
-    guid: cf89e74147c67154f920c69c7a4a1200
-  - enabled: 0
-    path: Assets/3_NETWORKING Source Code/TransportBase/start.unity
-    guid: b51ff4728db96684aa9f5746f489d24b
-  - enabled: 0
-    path: Assets/3_NETWORKING Source Code/TransportBase/transport-client.unity
-    guid: b361e8c710f1d464ca8d1444c981a0d5
-  - enabled: 0
-    path: Assets/3_NETWORKING Source Code/TransportBase/transport-server.unity
-    guid: c55de0db348e998418f9284239b415a7
+    path: Assets/1_WEB CONNECTIVITY/Scenes/Main Menu.unity
+    guid: b7e0980cec2ab8d4c8db69f29c101fa1
   - enabled: 1
     path: Assets/1_WEB CONNECTIVITY/Scenes/Login.unity
     guid: c1c2ef583459df144b73a49a358c84a1

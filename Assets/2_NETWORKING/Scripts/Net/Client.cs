@@ -29,13 +29,10 @@ public class Client : MonoBehaviour
         CheckAlive();
         UpdateMessagePump();
     }
-
-
     public void OnDestroy()
     {
         Shutdown();
     }
-
     public void OnApplicationQuit()
     {
         Shutdown();
@@ -54,7 +51,6 @@ public class Client : MonoBehaviour
 
         RegisterToEvent();
     }
-
     public void Shutdown()
     {
         if (isActive)
@@ -64,6 +60,13 @@ public class Client : MonoBehaviour
             isActive = false;
             connection = default(NetworkConnection);
         }
+    }
+    public void SendToServer(NetMessage msg)
+    {
+        DataStreamWriter streamWriter;
+        driver.BeginSend(connection, out streamWriter);
+        //msg.Serialize(ref streamWriter);
+        driver.EndSend(streamWriter);
     }
 
     /// <summary>
@@ -78,7 +81,6 @@ public class Client : MonoBehaviour
             Shutdown();
         }
     }
-
     /// <summary>
     /// Check for messages and handle them accordingly.
     /// </summary>
@@ -91,6 +93,7 @@ public class Client : MonoBehaviour
             if (cmd == NetworkEvent.Type.Connect)
             {
                 //SendToServer(new NetWelcome());
+                Debug.Log("We're connected!");
             }
             else if (cmd == NetworkEvent.Type.Data)
             {
@@ -105,14 +108,6 @@ public class Client : MonoBehaviour
             }
         }
     }
-
-    public void SendToServer(NetMessage msg)
-    {
-        DataStreamWriter streamWriter;
-        driver.BeginSend(connection, out streamWriter);
-        //msg.Serialize(ref streamWriter);
-        driver.EndSend(streamWriter);
-    }
     #endregion
 
     #region Event Parsing
@@ -120,12 +115,10 @@ public class Client : MonoBehaviour
     {
         NetUtility.C_KEEP_ALIVE += OnKeepAlive;
     }
-
     private void UnregisterToEvent()
     {
         NetUtility.C_KEEP_ALIVE -= OnKeepAlive;
     }
-
     private void OnKeepAlive(NetMessage msg)
     {
         // Send it back, to keep both sides alive.
