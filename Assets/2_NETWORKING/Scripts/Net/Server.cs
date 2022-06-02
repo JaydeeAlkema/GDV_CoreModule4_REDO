@@ -83,7 +83,11 @@ public class Server : MonoBehaviour
     /// </summary>
     private void KeepAlive()
     {
-
+        if (Time.time - lastKeepAlive > keepAliveTickRate)
+        {
+            lastKeepAlive = Time.time;
+            Broadcast(new NetKeepAlive());
+        }
     }
     /// <summary>
     /// Check if there are any people not connected, but still in the list of connections.
