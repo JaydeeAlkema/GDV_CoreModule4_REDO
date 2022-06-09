@@ -22,7 +22,7 @@ public static class NetUtility
         switch (opCode)
         {
             case OpCode.WELCOME: msg = new NetWelcome(streamReader); break;
-            //case OpCode.START_GAME: msg = new NetStartGame(streamReader); break;
+            case OpCode.START_GAME: msg = new NetStartGame(streamReader); break;
             case OpCode.KEEP_ALIVE: msg = new NetKeepAlive(streamReader); break;
             //case OpCode.PLACE_TOWER: msg = new NetPlaceTower(streamReader); break;
             //case OpCode.REMATCH: msg = new NetRematch(streamReader); break;

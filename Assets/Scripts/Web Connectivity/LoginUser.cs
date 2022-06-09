@@ -67,7 +67,7 @@ public class LoginUser : MonoBehaviour
                     UserData user = JsonUtility.FromJson<UserData>(www.downloadHandler.text);
                     user.SaveDataToPlayerPrefs();
 
-                    LoadSceneByIndex(2);
+                    LoadSceneByIndex(3);
                 }
             }
         }
