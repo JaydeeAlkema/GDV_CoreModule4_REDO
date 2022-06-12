@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Networking.Transport;
-using UnityEngine;
 
 public class NetWelcome : NetMessage
 {
-    public int AssignedTeam { get; set; }
+    public byte AssignedTeam { get; set; }
 
     public NetWelcome()
     {
@@ -20,11 +17,11 @@ public class NetWelcome : NetMessage
     public override void Serialize(ref DataStreamWriter dataStreamWriter)
     {
         dataStreamWriter.WriteByte((byte)code);
-        dataStreamWriter.WriteInt(AssignedTeam);
+        dataStreamWriter.WriteByte(AssignedTeam);
     }
     public override void Deserialize(DataStreamReader reader)
     {
-        AssignedTeam = reader.ReadInt();
+        AssignedTeam = reader.ReadByte();
     }
 
     public override void ReceivedOnClient()

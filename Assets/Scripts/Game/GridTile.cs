@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GridTile : MonoBehaviour
+public class GridTile : MonoBehaviour, ISelectable
 {
     public Material defaultMaterial;
     public Material OnSelectedMaterial;
@@ -15,11 +13,6 @@ public class GridTile : MonoBehaviour
         renderer.material = defaultMaterial;
     }
 
-    private void OnMouseDown()
-    {
-        Destroy(gameObject);
-    }
-
     private void OnMouseOver()
     {
         renderer.material = OnSelectedMaterial;
@@ -28,5 +21,10 @@ public class GridTile : MonoBehaviour
     private void OnMouseExit()
     {
         renderer.material = defaultMaterial;
+    }
+
+    public string Select()
+    {
+        return gameObject.name;
     }
 }

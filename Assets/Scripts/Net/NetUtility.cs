@@ -7,7 +7,7 @@ public enum OpCode
     WELCOME = 1,
     START_GAME = 2,
     KEEP_ALIVE = 3,
-    PLACE_TOWER = 4,
+    PLAYER_INTERACT = 4,
     REMATCH = 5,
 }
 
@@ -24,7 +24,7 @@ public static class NetUtility
             case OpCode.WELCOME: msg = new NetWelcome(streamReader); break;
             case OpCode.START_GAME: msg = new NetStartGame(streamReader); break;
             case OpCode.KEEP_ALIVE: msg = new NetKeepAlive(streamReader); break;
-            //case OpCode.PLACE_TOWER: msg = new NetPlaceTower(streamReader); break;
+            case OpCode.PLAYER_INTERACT: msg = new NetPlayerInteract(streamReader); break;
             //case OpCode.REMATCH: msg = new NetRematch(streamReader); break;
             default:
                 Debug.LogError("Message received had no OpCode!");
@@ -46,13 +46,13 @@ public static class NetUtility
     public static Action<NetMessage> C_WELCOME;
     public static Action<NetMessage> C_START_GAME;
     public static Action<NetMessage> C_KEEP_ALIVE;
-    public static Action<NetMessage> C_PLACE_TOWER;
+    public static Action<NetMessage> C_PLAYER_INTERACT;
     public static Action<NetMessage> C_REMATCH;
 
     // Server Messages
     public static Action<NetMessage, NetworkConnection> S_WELCOME;
     public static Action<NetMessage, NetworkConnection> S_START_GAME;
     public static Action<NetMessage, NetworkConnection> S_KEEP_ALIVE;
-    public static Action<NetMessage, NetworkConnection> S_PLACE_TOWER;
+    public static Action<NetMessage, NetworkConnection> S_PLAYER_INTERACT;
     public static Action<NetMessage, NetworkConnection> S_REMATCH;
 }

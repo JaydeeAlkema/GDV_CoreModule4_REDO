@@ -1,4 +1,4 @@
 public interface ISelectable
 {
-    void Select();
+    string Select();
 }

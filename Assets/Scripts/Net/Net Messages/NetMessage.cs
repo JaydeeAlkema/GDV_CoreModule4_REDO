@@ -15,10 +15,10 @@ public class NetMessage
 
     public virtual void ReceivedOnClient()
     {
-        NetUtility.C_WELCOME?.Invoke(this);
+
     }
     public virtual void ReceivedOnServer(NetworkConnection connection)
     {
-        NetUtility.S_WELCOME?.Invoke(this, connection);
+
     }
 }
