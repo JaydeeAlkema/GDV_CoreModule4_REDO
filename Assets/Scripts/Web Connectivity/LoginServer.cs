@@ -54,6 +54,7 @@ public class LoginServer : MonoBehaviour
                 {
                     userFeedbackMessageText.color = Color.green;
                     userFeedbackMessageText.text = "Login successful! Loading...";
+                    yield return new WaitForSeconds(2);
 
                     PlayerPrefs.SetString("session_id", www.downloadHandler.text);
                     GameManager.Instance.ToggleUIPanel(uiPanelToToggleOnSuccessfullLogin);

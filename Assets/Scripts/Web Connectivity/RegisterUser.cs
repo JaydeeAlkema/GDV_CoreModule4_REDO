@@ -37,7 +37,7 @@ public class RegisterUser : MonoBehaviour
     private int customErrorCode = 0; // 0 is good, everything else is bad.
     #endregion
 
-    private void Start()
+    private void OnEnable()
     {
         if (loadUserDataOnSceneLoad)
         {
@@ -170,6 +170,8 @@ public class RegisterUser : MonoBehaviour
             {
                 userFeedbackMessageText.color = Color.green;
                 userFeedbackMessageText.text = "Account created successfully! Forwarding to login page...";
+                yield return new WaitForSeconds(2);
+
                 GameManager.Instance.ToggleUIPanel(uiPanelToToggleOnSuccessfullRegister);
             }
             else
@@ -233,6 +235,16 @@ public class RegisterUser : MonoBehaviour
             {
                 userFeedbackMessageText.color = Color.green;
                 userFeedbackMessageText.text = "Saved changes successfully!";
+
+                userData.username = usernameTextInputfield.text;
+                userData.first_name = firstNameTextInputfield.text;
+                userData.last_name = lastNameTextInputfield.text;
+                userData.password = passwordTextInputfield.text;
+                userData.email = emailTextInputfield.text;
+                //userData.birth_date = new DateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text)).ToString();
+                userData.SaveDataToPlayerPrefs();
+
+                Debug.Log(new DateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text)).ToString());
             }
             else
             {

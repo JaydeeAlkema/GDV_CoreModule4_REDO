@@ -406,17 +406,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
+    m_Left: 16
+    m_Right: 16
     m_Top: 8
-    m_Bottom: 8
+    m_Bottom: 16
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 350, y: 128}
-  m_Spacing: {x: 64, y: 0}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_Spacing: {x: 32, y: 0}
+  m_Constraint: 2
+  m_ConstraintCount: 1
 --- !u!1 &48609783
 GameObject:
   m_ObjectHideFlags: 0
@@ -1631,7 +1631,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 6
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2474,7 +2474,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3163,7 +3163,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5633,7 +5633,7 @@ MonoBehaviour:
   usernameTextInputfield: {fileID: 1150766520}
   passwordTextInputfield: {fileID: 1250465610}
   userFeedbackMessageText: {fileID: 225633113}
-  uiPanelToToggleOnSuccessfullLogin: 6
+  uiPanelToToggleOnSuccessfullLogin: 5
 --- !u!114 &349681143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5843,7 +5843,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 777.61597, y: -65.1766}
+  m_AnchoredPosition: {x: 952.61597, y: -61.176598}
   m_SizeDelta: {x: 350, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &354265423
@@ -7255,7 +7255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minUsernameCharacterAmount: 6
   minPasswordCharacterAmount: 8
-  loadUserDataOnSceneLoad: 0
+  loadUserDataOnSceneLoad: 1
   uiPanelToToggleOnSuccessfullRegister: 3
   panelTransform: {fileID: 479401316}
   usernameTextInputfield: {fileID: 699756194}
@@ -10137,7 +10137,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 68.7
+  m_fontSize: 69.7
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -14769,7 +14769,6 @@ GameObject:
   - component: {fileID: 1047488247}
   - component: {fileID: 1047488246}
   - component: {fileID: 1047488245}
-  - component: {fileID: 1047488244}
   m_Layer: 5
   m_Name: Highscores Panel
   m_TagString: Untagged
@@ -14797,33 +14796,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1047488244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1047488242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60b7100568ed85c4691f6278d8d3ecf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minUsernameCharacterAmount: 6
-  minPasswordCharacterAmount: 8
-  loadUserDataOnSceneLoad: 0
-  uiPanelToToggleOnSuccessfullRegister: 3
-  panelTransform: {fileID: 1047488243}
-  usernameTextInputfield: {fileID: 0}
-  firstNameTextInputfield: {fileID: 0}
-  lastNameTextInputfield: {fileID: 0}
-  emailTextInputfield: {fileID: 0}
-  passwordTextInputfield: {fileID: 0}
-  passwordConfirmTextInputfield: {fileID: 0}
-  birthdateDayTextInputfield: {fileID: 0}
-  birthdateMonthTextInputfield: {fileID: 0}
-  birthdateYearTextInputfield: {fileID: 0}
-  userFeedbackMessageText: {fileID: 1399603219}
 --- !u!114 &1047488245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18343,7 +18315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minUsernameCharacterAmount: 6
   minPasswordCharacterAmount: 8
-  loadUserDataOnSceneLoad: 0
+  loadUserDataOnSceneLoad: 1
   uiPanelToToggleOnSuccessfullRegister: 0
   panelTransform: {fileID: 1186700580}
   usernameTextInputfield: {fileID: 1631188841}
@@ -20284,7 +20256,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 6
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -21785,8 +21757,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 363.61597, y: -184.77954}
-  m_SizeDelta: {x: 350, y: 126.8}
+  m_AnchoredPosition: {x: 188.61597, y: -61.176598}
+  m_SizeDelta: {x: 350, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1465122481
 MonoBehaviour:
@@ -21854,7 +21826,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 6
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -25147,7 +25119,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 6
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -27597,7 +27569,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 363.61597, y: -65.1766}
+  m_AnchoredPosition: {x: 570.61597, y: -61.176598}
   m_SizeDelta: {x: 350, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1953058901

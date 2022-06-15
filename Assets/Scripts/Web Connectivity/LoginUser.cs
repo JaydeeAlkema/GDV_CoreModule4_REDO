@@ -67,7 +67,7 @@ public class LoginUser : MonoBehaviour
 
                     UserData user = JsonUtility.FromJson<UserData>(www.downloadHandler.text);
                     user.SaveDataToPlayerPrefs();
-
+                    yield return new WaitForSeconds(2);
                     GameManager.Instance.ToggleUIPanel(uiPanelToToggleOnSuccessfullLogin);
                 }
             }
