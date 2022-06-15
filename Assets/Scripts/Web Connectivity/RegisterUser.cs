@@ -3,7 +3,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 
 public class RegisterUser : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class RegisterUser : MonoBehaviour
     [SerializeField] private int minUsernameCharacterAmount = 6;
     [SerializeField] private int minPasswordCharacterAmount = 8;
     [SerializeField] private bool loadUserDataOnSceneLoad = false;
+    [SerializeField] private int uiPanelToToggleOnSuccessfullRegister = 3;
 
     [Header("Misc References")]
     [SerializeField] private Transform panelTransform = default;
@@ -127,15 +127,6 @@ public class RegisterUser : MonoBehaviour
     }
 
     /// <summary>
-    /// Loads scene by given index.
-    /// </summary>
-    /// <param name="index"> Index of the scene. </param>
-    public void LoadSceneByIndex(int index)
-    {
-        SceneManager.LoadScene(index);
-    }
-
-    /// <summary>
     /// Send the actual data via a webrequest to insert a new user into the database.
     /// </summary>
     /// <returns></returns>
@@ -179,7 +170,7 @@ public class RegisterUser : MonoBehaviour
             {
                 userFeedbackMessageText.color = Color.green;
                 userFeedbackMessageText.text = "Account created successfully! Forwarding to login page...";
-                LoadSceneByIndex(0);
+                GameManager.Instance.ToggleUIPanel(uiPanelToToggleOnSuccessfullRegister);
             }
             else
             {

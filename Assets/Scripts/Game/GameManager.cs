@@ -1,20 +1,33 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.Networking.Transport;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager instance;
+
     [SerializeField] private GameObject MainMenuUI = default;
     [SerializeField] private TextMeshProUGUI currentTeamTurnText = default;
     [SerializeField] private TextMeshProUGUI currentTeamText = default;
+    [Space]
+    [SerializeField] private List<GameObject> UIPanels = new List<GameObject>();
 
     private byte playerCount = 255;
     private byte currentTeam = 255;
     private byte currentTeamTurn = 255;
     private byte gameState = 0;
 
+    public static GameManager Instance { get => instance; private set => instance = value; }
+
     private void Awake()
     {
+        if (instance == null || instance != this)
+        {
+            Destroy(instance);
+            instance = this;
+        }
+
         RegisterEvents();
     }
 
@@ -26,7 +39,8 @@ public class GameManager : MonoBehaviour
     #region Gameplay Stuff
     private void RaycastForGridTile()
     {
-        if (gameState == 0 || currentTeamTurn != currentTeam) return;
+        // Only raycast if the gamestate is 0 (play mode) and it's currently the users turn.
+        if (gameState == 0 && currentTeamTurn != currentTeam) return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Tile")))
@@ -40,6 +54,45 @@ public class GameManager : MonoBehaviour
                 Client.Instance.SendToServer(netPlayerInteract);
             }
         }
+    }
+
+    /// <summary>
+    /// Toggles the UI panel with the given index.
+    /// </summary>
+    /// <param name="index"></param>
+    public void ToggleUIPanel(int index)
+    {
+        for (int i = 0; i < UIPanels.Count; i++)
+        {
+            if (i == index)
+            {
+                UIPanels[i].SetActive(true);
+            }
+            else
+            {
+                UIPanels[i].SetActive(false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Disables all the UI panels (except ingame UI)
+    /// </summary>
+    public void DisableUI()
+    {
+        foreach (GameObject panel in UIPanels)
+        {
+            panel.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// Quits the game...
+    /// </summary>
+    public void QuitGame()
+    {
+        PlayerPrefs.DeleteAll();
+        Application.Quit();
     }
     #endregion
 

@@ -13,7 +13,14 @@ public class Tester : MonoBehaviour
 
     private void Awake()
     {
-        usernameText.text = $"Logged in as {PlayerPrefs.GetString("username")}";
+        string username = PlayerPrefs.GetString("username");
+        if (string.IsNullOrEmpty(username) || usernameText == null)
+        {
+            Debug.Log("Username is either empty (User hasn't logged in yet), or the username text UI element is not set/broken");
+            return;
+        }
+
+        usernameText.text = $"Logged in as {username}";
     }
 
     public void OnPlayButton()

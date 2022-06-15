@@ -2,7 +2,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 
 public class LoginUser : MonoBehaviour
 {
@@ -12,36 +11,38 @@ public class LoginUser : MonoBehaviour
     [SerializeField] private TMP_InputField passwordTextInputfield = default;
     [Space]
     [SerializeField] private TMP_Text userFeedbackMessageText = default;
+    [SerializeField] private int uiPanelToToggleOnSuccessfullLogin = 4;
     #endregion
 
     /// <summary>
     /// Calls the SendLoginWebRequestCoroutine function.
     /// </summary>
-    public void SendLoginWebRequest()
+    public void SendUserLoginWebRequest()
     {
-        StartCoroutine(SendLoginWebRequestCoroutine());
-    }
-
-    /// <summary>
-    /// Loads scene by given index.
-    /// </summary>
-    /// <param name="index"> Index of the scene. </param>
-    public void LoadSceneByIndex(int index)
-    {
-        SceneManager.LoadScene(index);
+        StartCoroutine(SendUserLoginWebRequestCoroutine());
     }
 
     /// <summary>
     /// Send the actual data via a webrequest to login a existing user.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator SendLoginWebRequestCoroutine()
+    private IEnumerator SendUserLoginWebRequestCoroutine()
     {
         string insertUserURL = "https://studentdav.hku.nl/~jaydee.alkema/databasing/login_user.php";
+
+        string session_id = PlayerPrefs.GetInt("session_id").ToString();
+
+        if (session_id == "")
+        {
+            userFeedbackMessageText.color = Color.red;
+            userFeedbackMessageText.text = "No session id found! Please login into a server first!";
+            yield return null;
+        }
 
         WWWForm form = new WWWForm();
         form.AddField("username", usernameTextInputfield.text);
         form.AddField("password", passwordTextInputfield.text);
+        form.AddField("session_id", session_id);
 
         using (UnityWebRequest www = UnityWebRequest.Post(insertUserURL, form))
         {
@@ -67,55 +68,9 @@ public class LoginUser : MonoBehaviour
                     UserData user = JsonUtility.FromJson<UserData>(www.downloadHandler.text);
                     user.SaveDataToPlayerPrefs();
 
-                    LoadSceneByIndex(3);
+                    GameManager.Instance.ToggleUIPanel(uiPanelToToggleOnSuccessfullLogin);
                 }
             }
         }
-    }
-}
-
-[System.Serializable]
-public class UserData
-{
-    public string id;
-    public string username;
-    public string first_name;
-    public string last_name;
-    public string password;
-    public string email;
-    public string birth_date;
-    public string register_date;
-    public string last_login_date;
-
-    /// <summary>
-    /// Saves all userdata to playerprefs. Is this secure? No. Is this convenient? Yes!
-    /// </summary>
-    public void SaveDataToPlayerPrefs()
-    {
-        PlayerPrefs.SetInt("id", int.Parse(id));
-        PlayerPrefs.SetString("username", username);
-        PlayerPrefs.SetString("first_name", first_name);
-        PlayerPrefs.SetString("last_name", last_name);
-        PlayerPrefs.SetString("password", password);
-        PlayerPrefs.SetString("email", email);
-        PlayerPrefs.SetString("birth_date", birth_date);
-        PlayerPrefs.SetString("register_date", register_date);
-        PlayerPrefs.SetString("last_login_date", last_login_date);
-    }
-
-    /// <summary>
-    /// Get all UserData from PlayerPrefs.
-    /// </summary>
-    public void GetDataFromPlayerPrefs()
-    {
-        id = PlayerPrefs.GetInt("id").ToString();
-        username = PlayerPrefs.GetString("username");
-        first_name = PlayerPrefs.GetString("first_name");
-        last_name = PlayerPrefs.GetString("last_name");
-        password = PlayerPrefs.GetString("password");
-        email = PlayerPrefs.GetString("email");
-        birth_date = PlayerPrefs.GetString("birth_date");
-        register_date = PlayerPrefs.GetString("register_date");
-        last_login_date = PlayerPrefs.GetString("last_login_date");
     }
 }
