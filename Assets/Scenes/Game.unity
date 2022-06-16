@@ -345,9 +345,9 @@ MonoBehaviour:
   editUserButton: {fileID: 234797400}
   server: {fileID: 9399202}
   client: {fileID: 9399203}
-  playerCount: 255
-  currentTeam: 255
-  currentTeamTurn: 255
+  playerCount: 0
+  currentTeam: 0
+  currentTeamTurn: 0
   gameState: 0
   serverLoggedIn: 0
   userLoggedIn: 0
