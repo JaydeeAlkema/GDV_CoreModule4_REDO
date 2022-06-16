@@ -53,7 +53,8 @@ public class RegisterUser : MonoBehaviour
                 passwordTextInputfield.text = userData.password;
                 passwordConfirmTextInputfield.text = userData.password;
 
-                DateTime dateTime = DateTime.Parse(userData.birth_date);
+                string[] splitBirthDate = userData.birth_date.Split('-');
+                DateTime dateTime = new DateTime(int.Parse(splitBirthDate[0]), int.Parse(splitBirthDate[1]), int.Parse(splitBirthDate[2]));
                 birthdateDayTextInputfield.text = dateTime.Day.ToString();
                 birthdateMonthTextInputfield.text = dateTime.Month.ToString();
                 birthdateYearTextInputfield.text = dateTime.Year.ToString();
@@ -136,6 +137,7 @@ public class RegisterUser : MonoBehaviour
         long birthdateToTimeStamp = GetTimestampFromDateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text));
 
         WWWForm form = new WWWForm();
+        form.AddField("id", -1);
         form.AddField("username", usernameTextInputfield.text);
         form.AddField("first_name", firstNameTextInputfield.text);
         form.AddField("last_name", lastNameTextInputfield.text);
@@ -154,7 +156,8 @@ public class RegisterUser : MonoBehaviour
             else
             {
                 string errorMessage = www.downloadHandler.text;
-                if (errorMessage.ToLower().Contains("error"))
+                Debug.Log(errorMessage);
+                if (errorMessage.ToLower().Contains("Error"))
                 {
                     string[] splitErrorMessage = errorMessage.Split(':');
                     customErrorCode = int.Parse(splitErrorMessage[1]);
@@ -190,16 +193,15 @@ public class RegisterUser : MonoBehaviour
         string insertUserURL = "https://studentdav.hku.nl/~jaydee.alkema/databasing/insert_user.php";
         long birthdateToTimeStamp = GetTimestampFromDateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text));
 
-        UserData userData = new UserData();
-        userData.GetDataFromPlayerPrefs();
+        GameManager.Instance.UserData.GetDataFromPlayerPrefs();
 
-        if (userData.id == "0")
+        if (GameManager.Instance.UserData.id == "0")
         {
             yield return null;
         }
 
         WWWForm form = new WWWForm();
-        form.AddField("id", userData.id);
+        form.AddField("id", GameManager.Instance.UserData.id);
         form.AddField("username", usernameTextInputfield.text);
         form.AddField("first_name", firstNameTextInputfield.text);
         form.AddField("last_name", lastNameTextInputfield.text);
@@ -236,13 +238,13 @@ public class RegisterUser : MonoBehaviour
                 userFeedbackMessageText.color = Color.green;
                 userFeedbackMessageText.text = "Saved changes successfully!";
 
-                userData.username = usernameTextInputfield.text;
-                userData.first_name = firstNameTextInputfield.text;
-                userData.last_name = lastNameTextInputfield.text;
-                userData.password = passwordTextInputfield.text;
-                userData.email = emailTextInputfield.text;
-                //userData.birth_date = new DateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text)).ToString();
-                userData.SaveDataToPlayerPrefs();
+                GameManager.Instance.UserData.username = usernameTextInputfield.text;
+                GameManager.Instance.UserData.first_name = firstNameTextInputfield.text;
+                GameManager.Instance.UserData.last_name = lastNameTextInputfield.text;
+                GameManager.Instance.UserData.password = passwordTextInputfield.text;
+                GameManager.Instance.UserData.email = emailTextInputfield.text;
+                GameManager.Instance.UserData.birth_date = new DateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text)).ToString();
+                GameManager.Instance.UserData.SaveDataToPlayerPrefs();
 
                 Debug.Log(new DateTime(int.Parse(birthdateDayTextInputfield.text), int.Parse(birthdateMonthTextInputfield.text), int.Parse(birthdateYearTextInputfield.text)).ToString());
             }

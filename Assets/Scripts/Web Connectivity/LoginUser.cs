@@ -62,11 +62,14 @@ public class LoginUser : MonoBehaviour
                 }
                 else
                 {
+                    GameManager.Instance.UserLoggedIn = true;
+
                     userFeedbackMessageText.color = Color.green;
                     userFeedbackMessageText.text = "Login successful! Loading...";
 
-                    UserData user = JsonUtility.FromJson<UserData>(www.downloadHandler.text);
-                    user.SaveDataToPlayerPrefs();
+                    GameManager.Instance.UserData = JsonUtility.FromJson<UserData>(www.downloadHandler.text);
+                    GameManager.Instance.UserData.SaveDataToPlayerPrefs();
+
                     yield return new WaitForSeconds(2);
                     GameManager.Instance.ToggleUIPanel(uiPanelToToggleOnSuccessfullLogin);
                 }

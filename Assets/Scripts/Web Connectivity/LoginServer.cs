@@ -52,6 +52,8 @@ public class LoginServer : MonoBehaviour
                 }
                 else
                 {
+                    GameManager.Instance.ServerLoggedIn = true;
+
                     userFeedbackMessageText.color = Color.green;
                     userFeedbackMessageText.text = "Login successful! Loading...";
                     yield return new WaitForSeconds(2);

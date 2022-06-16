@@ -1,31 +1,62 @@
+using NaughtyAttributes;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Networking.Transport;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
 
-    [SerializeField] private GameObject MainMenuUI = default;
-    [SerializeField] private TextMeshProUGUI currentTeamTurnText = default;
-    [SerializeField] private TextMeshProUGUI currentTeamText = default;
     [Space]
-    [SerializeField] private List<GameObject> UIPanels = new List<GameObject>();
+    [BoxGroup("UI References"), SerializeField] private GameObject MainMenuUI = default;
+    [BoxGroup("UI References"), SerializeField] private TextMeshProUGUI currentTeamTurnText = default;
+    [BoxGroup("UI References"), SerializeField] private TextMeshProUGUI currentTeamText = default;
+    [BoxGroup("UI References"), SerializeField] private TMP_InputField adressInput = default;
+    [BoxGroup("UI References"), SerializeField] private TextMeshProUGUI usernameText = default;
+    [BoxGroup("UI References"), SerializeField] private TextMeshProUGUI connectionStatusText = default;
+    [BoxGroup("UI References"), SerializeField] private List<GameObject> UIPanels = new List<GameObject>();
+    [Space]
+    [BoxGroup("UI References"), SerializeField] private Button playGameButton = default;
+    [BoxGroup("UI References"), SerializeField] private Button userLoginButton = default;
+    [BoxGroup("UI References"), SerializeField] private Button editUserButton = default;
 
-    private byte playerCount = 255;
-    private byte currentTeam = 255;
-    private byte currentTeamTurn = 255;
-    private byte gameState = 0;
+    [Space]
+    [BoxGroup("Networked Variables"), SerializeField] private Server server = default;
+    [BoxGroup("Networked Variables"), SerializeField] private Client client = default;
+    [BoxGroup("Networked Variables"), SerializeField, ReadOnly] private byte playerCount = 0;
+    [BoxGroup("Networked Variables"), SerializeField, ReadOnly] private byte currentTeam = 0;
+    [BoxGroup("Networked Variables"), SerializeField, ReadOnly] private byte currentTeamTurn = 0;
+    [BoxGroup("Networked Variables"), SerializeField, ReadOnly] private byte gameState = 0;
+
+    [Space]
+    [BoxGroup("Webconnectivity Variables"), SerializeField] private bool serverLoggedIn = false;
+    [BoxGroup("Webconnectivity Variables"), SerializeField] private bool userLoggedIn = false;
+    [BoxGroup("Webconnectivity Variables"), SerializeField] private UserData userData = new UserData();
 
     public static GameManager Instance { get => instance; private set => instance = value; }
+    public bool ServerLoggedIn { get { return serverLoggedIn; } set { serverLoggedIn = value; userLoginButton.interactable = serverLoggedIn; playGameButton.interactable = serverLoggedIn; } }
+    public bool UserLoggedIn { get { return userLoggedIn; } set { userLoggedIn = value; editUserButton.interactable = userLoggedIn; } }
+    public UserData UserData { get => userData; set => userData = value; }
 
     private void Awake()
     {
-        if (instance == null || instance != this)
+        if (instance == null || instance != this) instance = this;
+        if (userData == null) userData = new UserData();
+
+        userLoginButton.interactable = false;
+        editUserButton.interactable = false;
+        playGameButton.interactable = false;
+
+        string username = PlayerPrefs.GetString("username");
+        if (string.IsNullOrEmpty(username) || usernameText == null)
         {
-            instance = this;
+            Debug.Log("Username is either empty (User hasn't logged in yet), or the username text UI element is not set/broken");
+            return;
         }
+
+        usernameText.text = $"Logged in as {username}";
 
         RegisterEvents();
     }
@@ -39,7 +70,7 @@ public class GameManager : MonoBehaviour
     private void RaycastForGridTile()
     {
         // Only raycast if the gamestate is 0 (play mode) and it's currently the users turn.
-        if (gameState == 0 && currentTeamTurn != currentTeam) return;
+        if (gameState == 0 || currentTeamTurn != currentTeam) return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Tile")))
@@ -165,7 +196,7 @@ public class GameManager : MonoBehaviour
 
         currentTeamTurnText.text = "Current Team Turn: " + currentTeamTurn;
 
-        MainMenuUI.SetActive(false);
+        DisableUI();
     }
     private void OnPlayerInteractClient(NetMessage msg)
     {
@@ -177,6 +208,19 @@ public class GameManager : MonoBehaviour
         GameObject tileToDestroy = GameObject.Find(netPlayerInteract.TileName);
 
         if (tileToDestroy != null) Destroy(tileToDestroy);
+    }
+
+    // UI Button Events
+    public void OnOnlineHostButton()
+    {
+        server.Init(8007);
+        client.Init("127.0.0.1", 8007);
+        connectionStatusText.text = "Waiting for other player to connect...";
+    }
+    public void OnOnlineConnectButton()
+    {
+        client.Init(adressInput.text, 8007);
+        connectionStatusText.text = "Connecting...";
     }
     #endregion
 }
