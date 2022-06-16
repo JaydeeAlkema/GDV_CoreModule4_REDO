@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [BoxGroup("UI References"), SerializeField] private Button playGameButton = default;
     [BoxGroup("UI References"), SerializeField] private Button userLoginButton = default;
     [BoxGroup("UI References"), SerializeField] private Button editUserButton = default;
+    [BoxGroup("UI References"), SerializeField] private Button insertScoreButton = default;
 
     [Space]
     [BoxGroup("Networked Variables"), SerializeField] private Server server = default;
@@ -36,7 +37,7 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Webconnectivity Variables"), SerializeField] private UserData userData = new UserData();
 
     public static GameManager Instance { get => instance; private set => instance = value; }
-    public bool ServerLoggedIn { get { return serverLoggedIn; } set { serverLoggedIn = value; userLoginButton.interactable = serverLoggedIn; playGameButton.interactable = serverLoggedIn; } }
+    public bool ServerLoggedIn { get { return serverLoggedIn; } set { serverLoggedIn = value; userLoginButton.interactable = serverLoggedIn; playGameButton.interactable = serverLoggedIn; insertScoreButton.interactable = serverLoggedIn; } }
     public bool UserLoggedIn { get { return userLoggedIn; } set { userLoggedIn = value; editUserButton.interactable = userLoggedIn; } }
     public UserData UserData { get => userData; set => userData = value; }
 
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
         userLoginButton.interactable = false;
         editUserButton.interactable = false;
         playGameButton.interactable = false;
+        insertScoreButton.interactable = false;
 
         string username = PlayerPrefs.GetString("username");
         if (string.IsNullOrEmpty(username) || usernameText == null)

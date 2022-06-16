@@ -30,7 +30,11 @@ public class LoginServer : MonoBehaviour
     {
         string insertUserURL = "https://studentdav.hku.nl/~jaydee.alkema/databasing/login_server.php";
 
+        string sessionID = Random.Range(0, int.MaxValue).ToString();
+        Debug.Log(sessionID);
+
         WWWForm form = new WWWForm();
+        form.AddField("session_id", sessionID);
         form.AddField("servername", serverNameTextInputField.text);
         form.AddField("password", passwordTextInputfield.text);
 
@@ -45,7 +49,8 @@ public class LoginServer : MonoBehaviour
             else
             {
                 string returnText = www.downloadHandler.text;
-                if (returnText.ToLower().Contains("Wrong"))
+                Debug.Log(returnText);
+                if (returnText.ToLower().Contains("wrong"))
                 {
                     userFeedbackMessageText.color = Color.red;
                     userFeedbackMessageText.text = www.downloadHandler.text;
@@ -56,7 +61,7 @@ public class LoginServer : MonoBehaviour
 
                     userFeedbackMessageText.color = Color.green;
                     userFeedbackMessageText.text = "Login successful! Loading...";
-                    yield return new WaitForSeconds(2);
+                    yield return new WaitForSeconds(1.5f);
 
                     PlayerPrefs.SetString("session_id", www.downloadHandler.text);
                     GameManager.Instance.ToggleUIPanel(uiPanelToToggleOnSuccessfullLogin);
