@@ -25,10 +25,10 @@ public class GameManager : MonoBehaviour
     [Space]
     [BoxGroup("Networked Variables"), SerializeField] private Server server = default;
     [BoxGroup("Networked Variables"), SerializeField] private Client client = default;
-    [BoxGroup("Networked Variables"), SerializeField] private byte playerCount = 0;
-    [BoxGroup("Networked Variables"), SerializeField] private byte currentTeam = 0;
-    [BoxGroup("Networked Variables"), SerializeField] private byte currentTeamTurn = 0;
-    [BoxGroup("Networked Variables"), SerializeField] private byte gameState = 0;
+    [BoxGroup("Networked Variables"), SerializeField] private int playerCount = -1;
+    [BoxGroup("Networked Variables"), SerializeField] private int currentTeam = -1;
+    [BoxGroup("Networked Variables"), SerializeField] private int currentTeamTurn = 0;
+    [BoxGroup("Networked Variables"), SerializeField] private int gameState = 0;
 
     [Space]
     [BoxGroup("Webconnectivity Variables"), SerializeField] private bool serverLoggedIn = false;

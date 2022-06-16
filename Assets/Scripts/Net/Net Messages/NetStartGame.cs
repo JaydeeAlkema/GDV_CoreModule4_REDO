@@ -2,8 +2,8 @@ using Unity.Networking.Transport;
 
 public class NetStartGame : NetMessage
 {
-    public byte TeamTurn { get; set; }
-    public byte GameState { get; set; }
+    public int TeamTurn { get; set; }
+    public int GameState { get; set; }
 
     public NetStartGame()
     {
@@ -18,13 +18,13 @@ public class NetStartGame : NetMessage
     public override void Serialize(ref DataStreamWriter dataStreamWriter)
     {
         dataStreamWriter.WriteByte((byte)code);
-        dataStreamWriter.WriteByte(TeamTurn);
-        dataStreamWriter.WriteByte(GameState);
+        dataStreamWriter.WriteInt(TeamTurn);
+        dataStreamWriter.WriteInt(GameState);
     }
     public override void Deserialize(DataStreamReader reader)
     {
-        TeamTurn = reader.ReadByte();
-        GameState = reader.ReadByte();
+        TeamTurn = reader.ReadInt();
+        GameState = reader.ReadInt();
     }
 
     public override void ReceivedOnClient()

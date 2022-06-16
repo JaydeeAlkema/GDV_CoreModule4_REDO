@@ -2,8 +2,8 @@ using Unity.Networking.Transport;
 
 public class NetPlayerInteract : NetMessage
 {
-    public byte TeamID { get; set; }
-    public byte TeamTurn { get; set; }
+    public int TeamID { get; set; }
+    public int TeamTurn { get; set; }
     public string TileName { get; set; }
 
     public NetPlayerInteract() // Create
@@ -19,14 +19,14 @@ public class NetPlayerInteract : NetMessage
     public override void Serialize(ref DataStreamWriter dataStreamWriter)
     {
         dataStreamWriter.WriteByte((byte)code);
-        dataStreamWriter.WriteByte(TeamID);
-        dataStreamWriter.WriteByte(TeamTurn);
+        dataStreamWriter.WriteInt(TeamID);
+        dataStreamWriter.WriteInt(TeamTurn);
         dataStreamWriter.WriteFixedString32(TileName);
     }
     public override void Deserialize(DataStreamReader reader)
     {
-        TeamID = reader.ReadByte();
-        TeamTurn = reader.ReadByte();
+        TeamID = reader.ReadInt();
+        TeamTurn = reader.ReadInt();
         TileName = reader.ReadFixedString32().ToString();
     }
 
