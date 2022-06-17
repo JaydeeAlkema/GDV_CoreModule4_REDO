@@ -13,9 +13,10 @@ public class GameManager : MonoBehaviour
     [BoxGroup("UI References"), SerializeField] private GameObject MainMenuUI = default;
     [BoxGroup("UI References"), SerializeField] private TextMeshProUGUI currentTeamTurnText = default;
     [BoxGroup("UI References"), SerializeField] private TextMeshProUGUI currentTeamText = default;
-    [BoxGroup("UI References"), SerializeField] private TMP_InputField adressInput = default;
+    [BoxGroup("UI References"), SerializeField] private TextMeshProUGUI scoreText = default;
     [BoxGroup("UI References"), SerializeField] private TextMeshProUGUI usernameText = default;
     [BoxGroup("UI References"), SerializeField] private TextMeshProUGUI connectionStatusText = default;
+    [BoxGroup("UI References"), SerializeField] private TMP_InputField adressInput = default;
     [BoxGroup("UI References"), SerializeField] private List<GameObject> UIPanels = new List<GameObject>();
     [Space]
     [BoxGroup("UI References"), SerializeField] private Button playGameButton = default;
@@ -24,10 +25,16 @@ public class GameManager : MonoBehaviour
     [BoxGroup("UI References"), SerializeField] private Button insertScoreButton = default;
 
     [Space]
+    [BoxGroup("Local Variables"), SerializeField] private InsertScore insertScore = default;
+    [BoxGroup("Local Variables"), SerializeField] private int score = 0;
+    [BoxGroup("Local Variables"), SerializeField] private Transform gridTilesParent = default;
+    [BoxGroup("Local Variables"), SerializeField] private List<GridTile> gridTiles = new List<GridTile>();
+
+    [Space]
     [BoxGroup("Networked Variables"), SerializeField] private Server server = default;
     [BoxGroup("Networked Variables"), SerializeField] private Client client = default;
-    [BoxGroup("Networked Variables"), SerializeField] private int playerCount = -1;
-    [BoxGroup("Networked Variables"), SerializeField] private int currentTeam = -1;
+    [BoxGroup("Networked Variables"), SerializeField] private int playerCount = 0;
+    [BoxGroup("Networked Variables"), SerializeField] private int currentTeam = 0;
     [BoxGroup("Networked Variables"), SerializeField] private int currentTeamTurn = 0;
     [BoxGroup("Networked Variables"), SerializeField] private int gameState = 0;
 
@@ -43,6 +50,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        RegisterEvents();
+
         if (instance == null || instance != this) instance = this;
         if (userData == null) userData = new UserData();
 
@@ -55,12 +64,21 @@ public class GameManager : MonoBehaviour
         if (string.IsNullOrEmpty(username) || usernameText == null)
         {
             Debug.Log("Username is either empty (User hasn't logged in yet), or the username text UI element is not set/broken");
-            return;
         }
+        else
+        {
+            usernameText.text = $"Logged in as {username}";
+        }
+        scoreText.text = "Score: " + score;
 
-        usernameText.text = $"Logged in as {username}";
-
-        RegisterEvents();
+        foreach (Transform child in gridTilesParent.GetComponentsInChildren<Transform>())
+        {
+            GridTile gridTile = child.GetComponent<GridTile>();
+            if (gridTile != null)
+            {
+                gridTiles.Add(gridTile);
+            }
+        }
     }
 
     private void Update()
@@ -79,10 +97,47 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0) == true && hit.collider.GetComponent<ISelectable>() != null)
             {
+                GridTile gridTile = hit.collider.GetComponent<GridTile>();
                 NetPlayerInteract netPlayerInteract = new NetPlayerInteract();
                 netPlayerInteract.TeamID = currentTeam;
-                netPlayerInteract.TeamTurn = currentTeam == 1 ? (byte)0 : (byte)1;
+                netPlayerInteract.TeamTurn = currentTeam == 1 ? (byte)2 : (byte)1;
                 netPlayerInteract.TileName = hit.collider.GetComponent<ISelectable>()?.Select();
+                netPlayerInteract.TileNameTopNeighbour = string.Empty;
+                netPlayerInteract.TileNameBottomNeighbour = string.Empty;
+                netPlayerInteract.TileNameLeftNeighbour = string.Empty;
+                netPlayerInteract.TileNameRightNeighbour = string.Empty;
+
+                foreach (GridTile tile in gridTiles)
+                {
+                    // Top Neighbour
+                    if (tile.transform.position == gridTile.transform.position + new Vector3(0, 0, 1))
+                    {
+                        netPlayerInteract.TileNameTopNeighbour = tile.transform.name;
+                        score++;
+                    }
+                    // Bottom Neighbour
+                    if (tile.transform.position == gridTile.transform.position + new Vector3(0, 0, -1))
+                    {
+                        netPlayerInteract.TileNameBottomNeighbour = tile.transform.name;
+                        score++;
+                    }
+                    // Left Neighbour
+                    if (tile.transform.position == gridTile.transform.position + new Vector3(-1, 0, 0))
+                    {
+                        netPlayerInteract.TileNameLeftNeighbour = tile.transform.name;
+                        score++;
+                    }
+                    // Right Neighbour
+                    if (tile.transform.position == gridTile.transform.position + new Vector3(1, 0, 0))
+                    {
+                        netPlayerInteract.TileNameRightNeighbour = tile.transform.name;
+                        score++;
+                    }
+                }
+
+                score++;
+                scoreText.text = "Score: " + score;
+
                 Client.Instance.SendToServer(netPlayerInteract);
             }
         }
@@ -161,13 +216,31 @@ public class GameManager : MonoBehaviour
         Server.Instance.SendToClient(connection, netWelcome);
 
         // "Lobby" is full, start the game.
-        if (playerCount == 1)
+        if (playerCount == 2)
         {
             NetStartGame netStartGame = new NetStartGame();
             netStartGame.TeamTurn = (byte)Random.Range(0, 2);
             netStartGame.GameState = 1;
 
             Server.Instance.Broadcast(netStartGame);
+
+            // Randomize playing field.
+            foreach (GridTile gridTile in gridTiles)
+            {
+                int rand = Random.Range(0, 2);
+                if (rand == 1)
+                {
+                    NetPlayerInteract netPlayerInteract = new NetPlayerInteract();
+                    netPlayerInteract.TeamID = currentTeam;
+                    netPlayerInteract.TeamTurn = netStartGame.TeamTurn;
+                    netPlayerInteract.TileName = gridTile.gameObject.name;
+                    netPlayerInteract.TileNameTopNeighbour = string.Empty;
+                    netPlayerInteract.TileNameBottomNeighbour = string.Empty;
+                    netPlayerInteract.TileNameLeftNeighbour = string.Empty;
+                    netPlayerInteract.TileNameRightNeighbour = string.Empty;
+                    Client.Instance.SendToServer(netPlayerInteract);
+                }
+            }
         }
     }
     private void OnPlayerInteractServer(NetMessage msg, NetworkConnection connection)
@@ -207,9 +280,42 @@ public class GameManager : MonoBehaviour
         currentTeamTurn = netPlayerInteract.TeamTurn;
         currentTeamTurnText.text = "Current Team Turn: " + currentTeamTurn;
 
-        GameObject tileToDestroy = GameObject.Find(netPlayerInteract.TileName);
+        GameObject centerTile = GameObject.Find(netPlayerInteract.TileName);
+        GameObject topTile = GameObject.Find(netPlayerInteract.TileNameTopNeighbour);
+        GameObject bottomTile = GameObject.Find(netPlayerInteract.TileNameBottomNeighbour);
+        GameObject leftTile = GameObject.Find(netPlayerInteract.TileNameLeftNeighbour);
+        GameObject rightTile = GameObject.Find(netPlayerInteract.TileNameRightNeighbour);
 
-        if (tileToDestroy != null) Destroy(tileToDestroy);
+        if (centerTile != null)
+        {
+            gridTiles.Remove(centerTile.GetComponent<GridTile>());
+            Destroy(centerTile);
+        }
+        if (topTile != null)
+        {
+            gridTiles.Remove(topTile.GetComponent<GridTile>());
+            Destroy(topTile);
+        }
+        if (bottomTile != null)
+        {
+            gridTiles.Remove(bottomTile.GetComponent<GridTile>());
+            Destroy(bottomTile);
+        }
+        if (leftTile != null)
+        {
+            gridTiles.Remove(leftTile.GetComponent<GridTile>());
+            Destroy(leftTile);
+        }
+        if (rightTile != null)
+        {
+            gridTiles.Remove(rightTile.GetComponent<GridTile>());
+            Destroy(rightTile);
+        }
+
+        if (gridTiles.Count == 0)
+        {
+            insertScore.SendInsertScoreWebRequest(score, int.Parse(userData.id));
+        }
     }
 
     // UI Button Events
