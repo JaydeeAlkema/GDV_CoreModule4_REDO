@@ -315,6 +315,8 @@ public class GameManager : MonoBehaviour
         if (gridTiles.Count == 0)
         {
             insertScore.SendInsertScoreWebRequest(score, int.Parse(userData.id));
+            playGameButton.interactable = false;
+            ToggleUIPanel(5);
         }
     }
 

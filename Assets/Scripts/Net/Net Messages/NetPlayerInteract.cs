@@ -9,7 +9,7 @@ public class NetPlayerInteract : NetMessage
     public string TileNameBottomNeighbour { get; set; }
     public string TileNameLeftNeighbour { get; set; }
     public string TileNameRightNeighbour { get; set; }
-    // Dit zou efficienter zijn als het in de vorm van een (native)array zou zijn.
+    // Dit zou efficienter zijn als het in de vorm van een (native)array zou zijn. Maar dit werkt ook gewoon goed :)
 
     public NetPlayerInteract() // Create
     {
