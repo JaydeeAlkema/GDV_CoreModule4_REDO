@@ -9,7 +9,6 @@ public class Server : MonoBehaviour
 {
     #region Singleton Implementation
     public static Server Instance { get; private set; }
-
     private void Awake()
     {
         Instance = this;

@@ -5,8 +5,6 @@ using UnityEngine.Networking;
 
 public class InsertScore : MonoBehaviour
 {
-    public static InsertScore Instance { get; private set; }
-
     [SerializeField] private TMP_InputField userIdInputfield = default;
     [SerializeField] private TMP_InputField scoreInputField = default;
     [Space]
