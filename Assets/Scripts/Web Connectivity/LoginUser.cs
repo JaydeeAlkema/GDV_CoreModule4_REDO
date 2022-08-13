@@ -70,6 +70,8 @@ public class LoginUser : MonoBehaviour
                     GameManager.Instance.UserData = JsonUtility.FromJson<UserData>(www.downloadHandler.text);
                     GameManager.Instance.UserData.SaveDataToPlayerPrefs();
 
+                    GameManager.Instance.SetUsernameText(usernameTextInputfield.text);
+
                     yield return new WaitForSeconds(2);
                     GameManager.Instance.ToggleUIPanel(uiPanelToToggleOnSuccessfullLogin);
                 }

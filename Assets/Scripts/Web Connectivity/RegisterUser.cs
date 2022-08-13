@@ -18,6 +18,8 @@ public class RegisterUser : MonoBehaviour
 
     [Header("UI Elements")]
     [Space]
+    [SerializeField] private TMP_InputField[] inputfields = default;
+    [Space]
     [SerializeField] private TMP_InputField usernameTextInputfield = default;
     [Space]
     [SerializeField] private TMP_InputField firstNameTextInputfield = default;
@@ -68,7 +70,6 @@ public class RegisterUser : MonoBehaviour
     public void ValidateInputs()
     {
         // Check if any of the fields is left empty.
-        TMP_InputField[] inputfields = panelTransform.GetComponentsInChildren<TMP_InputField>();
         foreach (var inputfield in inputfields)
         {
             if (inputfield.text == string.Empty)

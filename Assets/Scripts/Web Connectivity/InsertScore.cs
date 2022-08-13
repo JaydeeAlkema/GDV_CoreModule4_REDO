@@ -11,14 +11,6 @@ public class InsertScore : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sessionIdText = default;
     [SerializeField] private TextMeshProUGUI userFeedbackMessageText = default;
 
-    private void Awake()
-    {
-        if (Instance != this || Instance == null)
-        {
-            Instance = this;
-        }
-    }
-
     public void SendInsertScoreWebRequest()
     {
         StartCoroutine(SendInsertScoreWebRequestCoroutine());

@@ -60,16 +60,16 @@ public class GameManager : MonoBehaviour
         playGameButton.interactable = false;
         insertScoreButton.interactable = false;
 
-        string username = PlayerPrefs.GetString("username");
-        if (string.IsNullOrEmpty(username) || usernameText == null)
-        {
-            Debug.Log("Username is either empty (User hasn't logged in yet), or the username text UI element is not set/broken");
-        }
-        else
-        {
-            usernameText.text = $"Logged in as {username}";
-        }
-        scoreText.text = "Score: " + score;
+        //string username = PlayerPrefs.GetString("username");
+        //if (string.IsNullOrEmpty(username) || usernameText == null)
+        //{
+        //    Debug.Log("Username is either empty (User hasn't logged in yet), or the username text UI element is not set/broken");
+        //}
+        //else
+        //{
+        //    usernameText.text = $"Logged in as {username}";
+        //}
+        //scoreText.text = "Score: " + score;
 
         foreach (Transform child in gridTilesParent.GetComponentsInChildren<Transform>())
         {
@@ -84,6 +84,11 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         RaycastForGridTile();
+    }
+
+    public void SetUsernameText(string username)
+    {
+        usernameText.text = $"Logged in as {username}";
     }
 
     #region Gameplay Stuff
