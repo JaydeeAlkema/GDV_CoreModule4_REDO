@@ -7845,6 +7845,7 @@ MonoBehaviour:
   loadUserDataOnSceneLoad: 1
   uiPanelToToggleOnSuccessfullRegister: 3
   panelTransform: {fileID: 479401316}
+  inputfields: []
   usernameTextInputfield: {fileID: 699756194}
   firstNameTextInputfield: {fileID: 1122017741}
   lastNameTextInputfield: {fileID: 242273859}
@@ -20690,6 +20691,16 @@ MonoBehaviour:
   loadUserDataOnSceneLoad: 0
   uiPanelToToggleOnSuccessfullRegister: 0
   panelTransform: {fileID: 1186700580}
+  inputfields:
+  - {fileID: 1631188841}
+  - {fileID: 1664394763}
+  - {fileID: 999605522}
+  - {fileID: 1175052606}
+  - {fileID: 193463853}
+  - {fileID: 253399740}
+  - {fileID: 2130841120}
+  - {fileID: 319117778}
+  - {fileID: 635271318}
   usernameTextInputfield: {fileID: 1631188841}
   firstNameTextInputfield: {fileID: 1664394763}
   lastNameTextInputfield: {fileID: 999605522}
